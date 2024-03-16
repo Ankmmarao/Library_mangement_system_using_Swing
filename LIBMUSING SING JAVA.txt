@@ -1,0 +1,160 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class Mavenproject1 extends JFrame implements ActionListener {
+     JLabel bookIdLabel, bookTitleLabel, authorLabel, publisherLabel, publicationYearLabel, isbnLabel, copiesLabel;
+     JTextField bookIdField, bookTitleField, authorField, publisherField, publicationYearField, isbnField, copiesField;
+     JButton addButton, viewButton, editButton, deleteButton, clearButton, exitButton;
+     JPanel panel;
+     ArrayList<String[]> books = new ArrayList<>();
+
+    public Mavenproject1() {
+        setTitle("Library Management System");
+        setSize(600, 300);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        bookIdLabel = new JLabel("Book ID");
+        bookTitleLabel = new JLabel("Book Title");
+        authorLabel = new JLabel("Author");
+        publisherLabel = new JLabel("Publisher");
+        publicationYearLabel = new JLabel("Year of Publication");
+        isbnLabel = new JLabel("ISBN");
+        copiesLabel = new JLabel("Number of Copies");
+
+        bookIdField = new JTextField(10);
+        bookTitleField = new JTextField(20);
+        authorField = new JTextField(20);
+        publisherField = new JTextField(20);
+        publicationYearField = new JTextField(10);
+        isbnField = new JTextField(20);
+        copiesField = new JTextField(10);
+
+        addButton = new JButton("Add");
+        viewButton = new JButton("View");
+        editButton = new JButton("Edit");
+        deleteButton = new JButton("Delete");
+        clearButton = new JButton("Clear");
+        exitButton=new JButton("Exit");
+
+        addButton.addActionListener(this);
+        viewButton.addActionListener(this);
+        editButton.addActionListener(this);
+        deleteButton.addActionListener(this);
+        clearButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
+        panel = new JPanel(new GridLayout(10,2));
+        panel.add(bookIdLabel);
+        panel.add(bookIdField);
+        panel.add(bookTitleLabel);
+        panel.add(bookTitleField);
+        panel.add(authorLabel);
+        panel.add(authorField);
+        panel.add(publisherLabel);
+        panel.add(publisherField);
+        panel.add(publicationYearLabel);
+        panel.add(publicationYearField);
+        panel.add(isbnLabel);
+        panel.add(isbnField);
+        panel.add(copiesLabel);
+        panel.add(copiesField);
+        panel.add(addButton);
+        panel.add(viewButton);
+        panel.add(editButton);
+        panel.add(deleteButton);
+        panel.add(clearButton);
+        panel.add(exitButton);
+
+        add(panel);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addButton) {
+            String[] book = new String[7];
+            book[0] = bookIdField.getText();
+            book[1] = bookTitleField.getText();
+            book[2] = authorField.getText();
+            book[3] = publisherField.getText();
+            book[4] = publicationYearField.getText();
+            book[5] = isbnField.getText();
+            book[6] = copiesField.getText();
+            books.add(book);
+            JOptionPane.showMessageDialog(this, "Book added successfully");
+            clearFields();
+        }
+        else if (e.getSource() == viewButton) {
+            String[] columns = {"Book ID", "Book Title", "Author", "Publisher", "Year of Publication", "ISBN", "Number of Copies"};
+            Object[][] data = new Object[books.size()][7];
+            for (int i = 0; i < books.size(); i++) {
+                data[i][0] = books.get(i)[0];
+                data[i][1] = books.get(i)[1];
+                data[i][2] = books.get(i)[2];
+                data[i][3] = books.get(i)[3];
+                data[i][4] = books.get(i)[4];
+                data[i][5] = books.get(i)[5];
+                data[i][6] = books.get(i)[6];
+            }
+            JTable table = new JTable(data, columns);
+            JScrollPane scrollPane = new JScrollPane(table);
+            JFrame frame = new JFrame("View Books");
+            frame.add(scrollPane);
+            frame.setSize(800, 400);
+            frame.setVisible(true);
+        }
+        else if (e.getSource() == editButton) {
+            String bookID = JOptionPane.showInputDialog(this, "Enter book ID to edit:");
+            for (int i = 0; i < books.size(); i++) {
+                if (books.get(i)[0].equals(bookID)) {
+                    String[] book = new String[7];
+                    book[0] = bookID;
+                    book[1] = bookTitleField.getText();
+                    book[2] = authorField.getText();
+                    book[3] = publisherField.getText();
+                    book[4] = publicationYearField.getText();
+                    book[5] = isbnField.getText();
+                    book[6] = copiesField.getText();
+                    books.set(i, book);
+                    JOptionPane.showMessageDialog(this, "Book edited successfully");
+                    clearFields();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Book not found");
+        }
+        else if (e.getSource() == deleteButton) {
+            String bookID = JOptionPane.showInputDialog(this, "Enter book ID to delete:");
+            for (int i = 0; i < books.size(); i++) {
+                if (books.get(i)[0].equals(bookID)) {
+                    books.remove(i);
+                    JOptionPane.showMessageDialog(this, "Book deleted successfully");
+                    clearFields();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Book not found");
+        }
+        else if (e.getSource() == clearButton) {
+            clearFields();
+        }
+        else if (e.getSource() == exitButton) {
+            System.exit(0);
+        }
+    }
+
+    private void clearFields() {
+        bookIdField.setText("");
+        bookTitleField.setText("");
+        authorField.setText("");
+        publisherField.setText("");
+        publicationYearField.setText("");
+        isbnField.setText("");
+        copiesField.setText("");
+    }
+
+    public static void main(String[] args) {
+        new Mavenproject1();
+    }
+}
